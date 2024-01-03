@@ -18,11 +18,17 @@ func (g *Game) InitGL() error {
 	}
 
 	gl.Viewport(0, 0, 1920, 1080)
-	return gl.Init()
+	if err := gl.Init(); err != nil {
+		return err
+	}
+
+	g.window.SetFramebufferSizeCallback(
+		func(w *glfw.Window, width int, height int) { gl.Viewport(0, 0, int32(width), int32(height)) })
+
+	return nil
 }
 
-func (g *Game) Init() error {
-	runtime.LockOSThread()
+func (g *Game) InitWindow() error {
 	if err := glfw.Init(); err != nil {
 		return err
 	}
@@ -36,13 +42,20 @@ func (g *Game) Init() error {
 	}
 
 	window.MakeContextCurrent()
-	err = g.InitGL()
-	window.SetFramebufferSizeCallback(
-		func(w *glfw.Window, width int, height int) { gl.Viewport(0, 0, int32(width), int32(height)) })
-
 	g.window = window
+	return nil
+}
 
-	return err
+func (g *Game) Init() error {
+	runtime.LockOSThread()
+
+	if err := g.InitWindow(); err != nil {
+		return err
+	}
+	if err := g.InitGL(); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (g *Game) Destroy() {
