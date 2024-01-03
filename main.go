@@ -12,7 +12,7 @@ type Game struct {
 	window *glfw.Window
 }
 
-func (g Game) InitGL() error {
+func (g *Game) InitGL() error {
 	if err := gl.Init(); err != nil {
 		return err
 	}
@@ -45,27 +45,27 @@ func (g *Game) Init() error {
 	return err
 }
 
-func (g Game) Destroy() {
+func (g *Game) Destroy() {
 	glfw.Terminate()
 }
 
-func (g Game) ProcessInput() {
+func (g *Game) ProcessInput() {
 	glfw.PollEvents()
 	if g.window.GetKey(glfw.KeyEscape) == glfw.Press {
 		g.window.SetShouldClose(true)
 	}
 }
 
-func (g Game) ClearBuffer() {
+func (g *Game) ClearBuffer() {
 	gl.ClearColor(1, 0, 1, 1)
 	gl.Clear(gl.COLOR_BUFFER_BIT)
 }
 
-func (g Game) SwapBuffer() {
+func (g *Game) SwapBuffer() {
 	g.window.SwapBuffers()
 }
 
-func (g Game) ShouldClose() bool {
+func (g *Game) ShouldClose() bool {
 	return g.window.ShouldClose()
 }
 
