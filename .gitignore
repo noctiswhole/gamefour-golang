@@ -1,0 +1,9 @@
+go-out
+.idea
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
